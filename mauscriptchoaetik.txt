@@ -17,7 +17,7 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.10615778, 0, 0.16217947, 0)
 ImageButton.Size = UDim2.new(0, 40, 0, 40)
 ImageButton.Draggable = true
-ImageButton.Image = "http://www.roblox.com/asset/?id=93569596173570 "  -- 👈 đổi ID ảnh nút mở menu tại đây (ảnh roblox)
+ImageButton.Image = "http://www.roblox.com/asset/?id=76121098594454 "  -- 👈 đổi ID ảnh nút mở menu tại đây (ảnh roblox)
 
 UICorner.CornerRadius = UDim.new(1, 10)
 UICorner.Parent = ImageButton
@@ -32,8 +32,8 @@ repeat wait() until game:IsLoaded()
 
 -- 🪟 Cửa sổ chính
 local Window = Fluent:CreateWindow({
-	Title = "💀Mất Quyền Truy Cập ",         -- 👈 đổi thành tên script của bạn
-	SubTitle = "XpHub",              -- 👈 đổi mô tả phụ
+	Title = "💀Mất Quyền Truy Cập",         -- 👈 đổi thành tên script của bạn
+	SubTitle = "Xqhub",              -- 👈 đổi mô tả phụ
 	TabWidth = 157,
 	Size = UDim2.fromOffset(450, 300),
 	Acrylic = true,
@@ -43,12 +43,12 @@ local Window = Fluent:CreateWindow({
 
 -- 📑 Các tab (mục chính)
 local Tabs = {
-	Main0 = Window:AddTab({ Title = "Một Số Kênh🤓" }),  -- 👈 đổi tên tab 1
-	Main1 = Window:AddTab({ Title = "FARM MONEY💵" }),  -- 👈 đổi tên tab 2
-	Main2 = Window:AddTab({ Title = "FARM BOSS🗿" }),     -- 👈 đổi tên tab 3
-	Main3 = Window:AddTab({ Title = "SHOP 💲" }),        -- 👈 đổi tên tab 4
-	Main4 = Window:AddTab({ Title = "PVP⚔️" }),    -- 👈 đổi tên tab 5
-	Main5 = Window:AddTab({ Title = "Farm NPC" }) -- 👈 đổi tên tab 6
+	Main0 = Window:AddTab({ Title = "một số kênh🤓" }),  -- 👈 đổi tên tab 1
+	Main1 = Window:AddTab({ Title = "FARM Tiền $" }),  -- 👈 đổi tên tab 2
+	Main2 = Window:AddTab({ Title = "FARM BOSS 🤖" }),     -- 👈 đổi tên tab 3
+	Main3 = Window:AddTab({ Title = "PVP⚔️" }),        -- 👈 đổi tên tab 4
+	Main4 = Window:AddTab({ Title = "SHOP Bảo Trì" }),    -- 👈 đổi tên tab 5
+	Main5 = Window:AddTab({ Title = "FARM NPC" }) -- 👈 đổi tên tab 6
 }
 
 ------------------------------------------------
@@ -56,7 +56,7 @@ local Tabs = {
 ------------------------------------------------
 Tabs.Main0:AddButton({
 	Title = "@xun.quyn15",              -- 👈 tên nút
-	Description = "Nhấn vào để sao chép link Tik Tok  ",-- 👈 mô tả nút
+	Description = "Nhấn vào để sao chép link tiktok ",-- 👈 mô tả nút
 	Callback = function()
 		setclipboard("https://www.tiktok.com/@xun.quyn15?_r=1&_t=ZS-91pwZ8A7SQa ")  -- 👈 link sao chép
 	end
@@ -74,30 +74,7 @@ Tabs.Main0:AddButton({
 -- TAB 2: Ví dụ thêm script
 ------------------------------------------------
 Tabs.Main1:AddButton({
-	Title = "MQKS💀",                         
-   -- =================================
-   -- MENU 1: FARM MONEY
-   -- =================================
-   local moneyTab = Window: MakeTab({
-    Name = "FARM MONEY",
-    Icon = "rbxassetid://6023426923"
-})
-     money Tab: AddToggle({
-     Name = "Auto Farm Money",
-     Default = false,
-     Callback = function(x)
-   AutoFarmMoney = x
-     if x then
-      task.spawn (FarmMoney)
-
-      end
-
-   end
-
-}) 
-
-Tabs.Main2:AddButton({
-	Title = "MQKS💀",                             -- 👈 tên nút hiển thị
+	Title = "FARM TIỀN $",                             -- 👈 tên nút hiển thị
 	Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
 	Callback = function()
 		local Settings = {
@@ -108,28 +85,15 @@ Tabs.Main2:AddButton({
 	end
 })
 
-Tabs.Main3:AddButton({
-	Title = "MQKS💀",                         
-   -- =================================
-   -- MENU 1: FARM MONEY
-   -- =================================
-   local moneyTab = Window: MakeTab({
-    Name = "FARM MONEY",
-    Icon = "rbxassetid://6023426923"
-})
-     money Tab: AddToggle({
-     Name = "Auto Farm Money",
-     Default = false,
-     Callback = function(x)
-   AutoFarmMoney = x
-     if x then
-      task.spawn (FarmMoney)
-
-      end
-
-   end
-
-}) 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() -- 👈 link script tải
+Tabs.Main2:AddButton({
+	Title = "speed hub🌱",                             -- 👈 tên nút hiển thị
+	Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
+	Callback = function()
+		local Settings = {
+			JoinTeam = "Pirates";   -- 👈 team mặc định: Pirates hoặc Marines
+			Translator = true;      -- 👈 bật dịch sang tiếng Việt nếu có
+		}
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() -- 👈 link script tải
 	end
 })
+
