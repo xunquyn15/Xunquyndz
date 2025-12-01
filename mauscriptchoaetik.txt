@@ -73,9 +73,6 @@ Tabs.Main0:AddButton({
 ------------------------------------------------
 -- TAB 2: Ví dụ thêm script
 ------------------------------------------------
--- đảm bảo chỉ khai báo player 1 lần
-local player = game.Players.LocalPlayer
-
 Tabs.Main1:AddButton({
     Title = "ANTI AFK",
     Description = "Không bị kick AFK 👍",
@@ -171,7 +168,7 @@ else
             MoneyLabel:SetText("Tiền hiện tại: " .. tostring(currentMoney))
             EarnLabel:SetText("Tiền kiếm được: " .. tostring(earned))
         end
-    end)
+    end
 end)
 })
 
