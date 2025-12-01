@@ -106,6 +106,105 @@ Tabs.Main2:AddButton({
 	Title = "Farm boss",                             -- 👈 tên nút hiển thị
 	Description = "nhấn vào để bật script ",-- 👈 mô tả
 	Callback = function()
+--// SETTINGS
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+
+local gui = player.PlayerGui:WaitForChild("BossMenu")
+
+local kcBox = gui.Frame:WaitForChild("TextBox") -- Khoảng cách
+local spBox = gui.Frame:WaitForChild("TextBox2") -- Tốc độ quay
+local autoBtn = gui.Frame:WaitForChild("AutoBtn")
+local noclipBtn = gui.Frame:WaitForChild("NoclipBtn")
+local hpLabel = gui.Frame:WaitForChild("HP")
+
+local autoFarm = false
+local noclip = false
+
+-----------------------
+-- NOCLIP SYSTEM
+-----------------------
+game:GetService("RunService").Stepped:Connect(function()
+    if noclip and char then
+        for _, v in pairs(char:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = false
+            end
+        end
+    end
+end)
+
+noclipBtn.MouseButton1Click:Connect(function()
+    noclip = not noclip
+    noclipBtn.Text = noclip and "TẮT: Noclip" or "BẬT: Noclip"
+end)
+
+-----------------------
+-- FIND NEAREST BOSS
+-----------------------
+function getNearestBoss()
+    local nearest = nil
+    local dist = math.huge
+
+    for _, mob in pairs(workspace:GetDescendants()) do
+        if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+            if mob.Humanoid.Health > 0 then
+                local d = (mob.HumanoidRootPart.Position - hrp.Position).Magnitude
+                if d < dist then
+                    dist = d
+                    nearest = mob
+                end
+            end
+        end
+    end
+
+    return nearest
+end
+
+-----------------------
+-- AUTO ATTACK FUNCTION
+-----------------------
+function attack()
+    local tool = char:FindFirstChildOfClass("Tool")
+    if tool and tool:FindFirstChild("Handle") then
+        tool:Activate()
+    end
+end
+
+-----------------------
+-- AUTO FARM LOOP
+-----------------------
+autoBtn.MouseButton1Click:Connect(function()
+    autoFarm = not autoFarm
+    autoBtn.Text = autoFarm and "TẮT: Auto Đánh" or "BẬT: Auto Đánh"
+
+    while autoFarm do
+        task.wait(0.05)
+
+        local boss = getNearestBoss()
+        if boss == nil then
+            hpLabel.Text = "Máu mục tiêu: Không tìm thấy!"
+            continue
+        end
+
+        local bossHRP = boss:FindFirstChild("HumanoidRootPart")
+        if not bossHRP then continue end
+
+        hpLabel.Text = "Máu mục tiêu: " .. math.floor(boss.Humanoid.Health)
+
+        local kc = tonumber(kcBox.Text) or 25
+        local spin = tonumber(spBox.Text) or 2
+        
+        -- BAY TRÊN ĐẦU BOSS
+        local abovePos = bossHRP.Position + Vector3.new(0, kc, 0)
+
+        hrp.CFrame = CFrame.new(abovePos) * CFrame.Angles(0, math.rad(tick() * spin * 60), 0)
+
+        -- TẤN CÔNG LIÊN TỤC
+        attack()
+    end
+end)	
 -- Tạo ScreenGui
 local gui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
 gui.Name = "BossMenu"
