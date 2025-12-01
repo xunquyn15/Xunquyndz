@@ -73,26 +73,28 @@ Tabs.Main0:AddButton({
 ------------------------------------------------
 -- TAB 2: Ví dụ thêm script
 ------------------------------------------------
+-- đảm bảo chỉ khai báo player 1 lần
+local player = game.Players.LocalPlayer
+
 Tabs.Main1:AddButton({
     Title = "ANTI AFK",
     Description = "Không bị kick AFK 👍",
     Callback = function()
-
         -- Thông báo hiện ngay khi bật
         pcall(function()
             game.StarterGui:SetCore("SendNotification", {
-                Title = "ANTI AFK";
-                Text = "Anti AFK đã bật!";
-                Duration = 4;
+                Title = "ANTI AFK",
+                Text = "Anti AFK đã bật!",
+                Duration = 4,
             })
         end)
 
         -- Code chống AFK
         local vu = game:GetService("VirtualUser")
-        local player = game.Players.LocalPlayer
 
         task.spawn(function()
             while true do
+                -- chờ sự kiện idled, khi xảy ra thì mô phỏng nút
                 player.Idled:Wait()
                 vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
                 task.wait(1)
@@ -101,49 +103,78 @@ Tabs.Main1:AddButton({
         end)
     end
 })
+
 -- LẤY THÔNG TIN NGƯỜI CHƠI
-local player = game.Players.LocalPlayer
-local leader = player:WaitForChild("leaderstats")
-local moneyStat = leader:WaitForChild("Money")
+-- (player đã khai báo ở trên)
+local leader = player:WaitForChild("leaderstats", 10) -- timeout để tránh treo vô thời hạn
+local moneyStat = nil
+if leader then
+    moneyStat = leader:WaitForChild("Money", 10)
+end
 
--- LẤY GIÁ TRỊ TIỀN BAN ĐẦU
-local startMoney = moneyStat.Value
-
--- LABEL HIỂN THỊ TIỀN HIỆN TẠI
-local MoneyLabel = Tabs.Main1:AddLabel("Tiền hiện tại: 0")
-
--- LABEL HIỂN THỊ TIỀN KIẾM ĐƯỢC
-local EarnLabel = Tabs.Main1:AddLabel("Tiền kiếm được: 0")
-
--- BUTTON RESET BỘ ĐẾM
-Tabs.Main1:AddButton({
-    Title = "RESET BỘ ĐẾM TIỀN",
-    Description = "Đặt lại số tiền đã đếm",
-    Callback = function()
-        startMoney = moneyStat.Value   -- reset lại mốc
-        EarnLabel:SetText("Tiền kiếm được: 0")
-
+if not moneyStat then
+    -- nếu ko tìm thấy Money, thông báo và dừng phần đếm tiền
+    pcall(function()
         game.StarterGui:SetCore("SendNotification", {
-            Title = "RESET THÀNH CÔNG",
-            Text = "Bộ đếm tiền đã được đặt lại!",
-            Duration = 3
+            Title = "Lỗi script",
+            Text = "Không tìm thấy leaderstats/Money. Đếm tiền tạm dừng.",
+            Duration = 5,
         })
-    end
-})
+    end)
+else
+    -- LẤY GIÁ TRỊ TIỀN BAN ĐẦU
+    local startMoney = moneyStat.Value
 
--- CẬP NHẬT TIỀN LIÊN TỤC
-task.spawn(function()
-    while true do
-        task.wait(0.5)
+    -- LABEL HIỂN THỊ TIỀN HIỆN TẠI
+    local MoneyLabel = Tabs.Main1:AddLabel("Tiền hiện tại: 0")
 
-        local currentMoney = moneyStat.Value
-        local earned = currentMoney - startMoney
+    -- LABEL HIỂN THỊ TIỀN KIẾM ĐƯỢC
+    local EarnLabel = Tabs.Main1:AddLabel("Tiền kiếm được: 0")
 
-        MoneyLabel:SetText("Tiền hiện tại: " .. tostring(currentMoney))
-        EarnLabel:SetText("Tiền kiếm được: " .. tostring(earned))
-    end
+    -- BUTTON RESET BỘ ĐẾM
+    Tabs.Main1:AddButton({
+        Title = "RESET BỘ ĐẾM TIỀN",
+        Description = "Đặt lại số tiền đã đếm",
+        Callback = function()
+            startMoney = moneyStat.Value   -- reset lại mốc
+            EarnLabel:SetText("Tiền kiếm được: 0")
+
+            pcall(function()
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "RESET THÀNH CÔNG",
+                    Text = "Bộ đếm tiền đã được đặt lại!",
+                    Duration = 3,
+                })
+            end)
+        end
+    })
+
+    -- CẬP NHẬT TIỀN LIÊN TỤC
+    task.spawn(function()
+        while true do
+            task.wait(0.5)
+            local success, currentMoney = pcall(function() return moneyStat.Value end)
+            if not success or currentMoney == nil then
+                -- nếu mất Money thì báo và break vòng lặp
+                pcall(function()
+                    game.StarterGui:SetCore("SendNotification", {
+                        Title = "Lỗi đếm tiền",
+                        Text = "Không lấy được giá trị Money nữa.",
+                        Duration = 4,
+                    })
+                end)
+                break
+            end
+
+            local earned = currentMoney - startMoney
+
+            MoneyLabel:SetText("Tiền hiện tại: " .. tostring(currentMoney))
+            EarnLabel:SetText("Tiền kiếm được: " .. tostring(earned))
+        end
+    end)
 end)
 })
+
 
 Tabs.Main2:AddButton({
 	Title = "speed hub🌱",                             -- 👈 tên nút hiển thị
