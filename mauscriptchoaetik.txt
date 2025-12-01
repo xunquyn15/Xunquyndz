@@ -73,47 +73,30 @@ Tabs.Main0:AddButton({
 ------------------------------------------------
 -- TAB 2: Ví dụ thêm script
 ------------------------------------------------
-Tabs.Main1:AddButton({
-	Title = "FARM TIỀN $",                             -- 👈 tên nút hiển thị
-	Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
-       Callback = function()
-    local Settings = {
-        JoinTeam = "Pirates";
-        Translator = true;
-    }
+Tabs.Main1:AddToggle({
+    Title = "Anti AFK",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("Anti AFK ON")
+            local vu = game:GetService("VirtualUser")
+            local player = game.Players.LocalPlayer
 
-    -- ⚡ Anti AFK UI Toggle
-    local button = script.Parent
-    local AntiAFK_Enabled = false
-
-    button.Text = "Anti AFK: OFF"
-
-    button.MouseButton1Click:Connect(function()
-        AntiAFK_Enabled = not AntiAFK_Enabled
-        
-        if AntiAFK_Enabled then
-            button.Text = "Anti AFK: ON"
-            print("Anti AFK đã bật")
-            
+            AntiAFK = true
             task.spawn(function()
-                local vu = game:GetService("VirtualUser")
-                local player = game.Players.LocalPlayer
-
-                while AntiAFK_Enabled do
+                while AntiAFK do
                     player.Idled:Wait()
                     vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
                     task.wait(1)
                     vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
                 end
             end)
-        else
-            button.Text = "Anti AFK: OFF"
-            print("Anti AFK đã tắt")
-        end
-    end)
 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
-end
+        else
+            print("Anti AFK OFF")
+            AntiAFK = false
+        end
+    end
 })
 
 Tabs.Main2:AddButton({
