@@ -101,35 +101,18 @@ Tabs.Main1:AddButton({
         end)
     end
 })
- 
--- LABEL HIỂN THỊ SỐ TIỀN HIỆN TẠI
-local MoneyLabel = Tabs.Main1:AddLabel("Tiền hiện tại: Đang tải...")
-
--- CẬP NHẬT TIỀN LIÊN TỤC
-task.spawn(function()
-    while true do
-        task.wait(0.5)
-
-        local player = game.Players.LocalPlayer
-        local money = player:WaitForChild("leaderstats"):FindFirstChild("Money")
-
-        if money then
-            MoneyLabel:SetText("Tiền hiện tại: " .. tostring(money.Value))
-        else
-            MoneyLabel:SetText("Không tìm thấy Money")
-        end
-    end
-end)
-})
--- LẤY SỐ TIỀN BAN ĐẦU
+-- LẤY THÔNG TIN NGƯỜI CHƠI
 local player = game.Players.LocalPlayer
-local moneyStat = player:WaitForChild("leaderstats"):WaitForChild("Money")
+local leader = player:WaitForChild("leaderstats")
+local moneyStat = leader:WaitForChild("Money")
+
+-- LẤY GIÁ TRỊ TIỀN BAN ĐẦU
 local startMoney = moneyStat.Value
 
--- LABEL: TIỀN HIỆN TẠI
+-- LABEL HIỂN THỊ TIỀN HIỆN TẠI
 local MoneyLabel = Tabs.Main1:AddLabel("Tiền hiện tại: 0")
 
--- LABEL: TIỀN KIẾM ĐƯỢC
+-- LABEL HIỂN THỊ TIỀN KIẾM ĐƯỢC
 local EarnLabel = Tabs.Main1:AddLabel("Tiền kiếm được: 0")
 
 -- BUTTON RESET BỘ ĐẾM
@@ -137,13 +120,13 @@ Tabs.Main1:AddButton({
     Title = "RESET BỘ ĐẾM TIỀN",
     Description = "Đặt lại số tiền đã đếm",
     Callback = function()
-        startMoney = moneyStat.Value  -- Reset lại mốc
+        startMoney = moneyStat.Value   -- reset lại mốc
         EarnLabel:SetText("Tiền kiếm được: 0")
 
         game.StarterGui:SetCore("SendNotification", {
-            Title = "RESET THÀNH CÔNG";
-            Text = "Bộ đếm tiền đã được đặt lại";
-            Duration = 3;
+            Title = "RESET THÀNH CÔNG",
+            Text = "Bộ đếm tiền đã được đặt lại!",
+            Duration = 3
         })
     end
 })
