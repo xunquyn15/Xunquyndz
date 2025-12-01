@@ -75,6 +75,7 @@ Tabs.Main0:AddButton({
 ------------------------------------------------
 Tabs.Main1:AddToggle({
     Title = "Anti AFK",
+    Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
     Default = false,
     Callback = function(state)
         if state then
