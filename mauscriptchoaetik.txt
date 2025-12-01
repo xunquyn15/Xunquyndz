@@ -73,30 +73,23 @@ Tabs.Main0:AddButton({
 ------------------------------------------------
 -- TAB 2: Ví dụ thêm script
 ------------------------------------------------
-Tabs.Main1:AddToggle({
-    Title = "Anti AFK",
-    Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
-    Default = false,
-    Callback = function(state)
-        if state then
-            print("Anti AFK ON")
-            local vu = game:GetService("VirtualUser")
-            local player = game.Players.LocalPlayer
+Tabs.Main1:AddButton({
+    Title = "ANTI AFK",
+    Description = "Chống kick AFK tự động 👍",
+    Callback = function()
+        local vu = game:GetService("VirtualUser")
+        local player = game.Players.LocalPlayer
 
-            AntiAFK = true
-            task.spawn(function()
-                while AntiAFK do
-                    player.Idled:Wait()
-                    vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-                    task.wait(1)
-                    vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-                end
-            end)
+        print("Anti AFK đang chạy...")
 
-        else
-            print("Anti AFK OFF")
-            AntiAFK = false
-        end
+        task.spawn(function()
+            while true do
+                task.wait(30)
+                vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+                task.wait(1)
+                vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+            end
+        end)
     end
 })
 
